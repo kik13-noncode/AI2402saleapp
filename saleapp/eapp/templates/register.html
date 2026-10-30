@@ -2,5 +2,40 @@
 
 {% block content %}
 <h1 class="text-center text-success mt-2">ĐĂNG KÝ NGƯỜI DÙNG</h1>
+<div class="alert alert-warning">
+    {{ msg }}
+</div>
+
+
+<form method="post" action="/register" enctype="multipart/form-data">
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="name" placeholder="Họ tên" name="name" required/>
+        <label for="name">Họ tên</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" name="username" required/>
+        <label for="username">Tên đăng nhập</label>
+    </div>
+    <div class="form-floating mb-3 mt-3">
+        <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" required/>
+        <label for="password">Mật khẩu</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="password" class="form-control" id="confirm" placeholder="Xác nhận mật khẩu" name="confirm"required/>
+        <label for="password">Xác nhận mật khẩu</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="file" class="form-control" id="avatar" name="avatar"/>
+        <label for="avatar">nh đại diện</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <button class="btn btn-success" type="submin"> Đăng ký</button>
+    </div>
+</form>
 
 {% endblock %}

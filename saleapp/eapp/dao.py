@@ -1,7 +1,8 @@
 
 
-from eapp.models import Category, Product
+from eapp.models import Category, Product, User
 from eapp import app
+import hashlib
 
 def load_categories():
     return Category.query.order_by('id').all()
@@ -22,3 +23,16 @@ def load_products(kw=None, cate_id=None, page=1):
 
 def count_products():
     return Product.query.count()
+
+def authorize(username, password):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    return User.query.filter(User.username.__eq__(username.strip()), User.password.__eq__(password)).first()
+
+def get_user_by_id(id):
+    return User.query.get(id)
+
+def add_user(name, username, password, avatar):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    u = User(name=name, username=username, password=password, avatar=avatar)
+    db.session.add(u)
+    db.session.commit()

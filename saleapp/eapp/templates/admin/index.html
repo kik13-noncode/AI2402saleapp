@@ -1,17 +1,32 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<form action="/">
+
+{% if current_user.is_authenticated %}
+<div class="row">
+    <div class="col-md-3">
+      <img src="{{ current_user.avatar }}" class="img-fluid rounded" />
+    </div>
+    <div class="col-md-9">
+      <h3> Chào <span class="text-success">{{current_user.username}}</span>!</h3>
+    </div>
+</div>
+
+{% else %}
+<form method="post" action="/login">
   <div class="form-group">
     <label for="username">Tên đăng nhập:</label>
-    <input type="text" class="form-control" placeholder="Tên đăng nhập" id="username">
+    <input type="text" class="form-control" placeholder="Tên đăng nhập" id="username" name="username">
   </div>
   <div class="form-group">
     <label for="pwd">Password:</label>
-    <input type="password" class="form-control" placeholder="Mật khẩu" id="pwd">
+    <input type="password" class="form-control" placeholder="Mật khẩu" id="pwd" name="password">
   </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% endif %}
+
+
 
 {% endblock %}
