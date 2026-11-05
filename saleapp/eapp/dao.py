@@ -1,7 +1,7 @@
 
 
 from eapp.models import Category, Product, User
-from eapp import app
+from eapp import app, db
 import hashlib
 
 def load_categories():
