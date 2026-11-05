@@ -34,15 +34,16 @@ class StatsView(BaseAuthenticatedView):
     def index(self):
         return self.render('admin/stats.html')
 
-class LogoutView(BaseAuthenticatedView):
+class LogoutView(BaseView):
     @expose('/')
     def index(self):
         logout_user()
         return redirect('/admin')
+        
     def is_accessible(self) -> bool:
         return current_user.is_authenticated
 
 admin.add_view(AuthenticatedView(Category, db.session))
-admin.add_view(ModelView(Product, db.session))
+admin.add_view(ProductView(Product, db.session))
 admin.add_view(StatsView(name='THỐNG KÊ' ))
 admin.add_view(LogoutView(name='ĐĂNG XUẤT' ))
