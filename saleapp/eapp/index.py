@@ -50,7 +50,7 @@ def register_process():
         data = request.form.copy()
         del data['confirm']
         data['avatar'] = 'https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729533/zuur9gzztcekmyfenkfr.jpg'
-        dao.add.user(**data)
+        dao.add_user(**data)
         return redirect('/login')
     return render_template('register.html', msg=msg)
 
