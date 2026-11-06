@@ -3,6 +3,7 @@
 from eapp.models import Category, Product, User
 from eapp import app, db
 import hashlib
+import cloudinary.uploader
 
 def load_categories():
     return Category.query.order_by('id').all()
@@ -34,5 +35,10 @@ def get_user_by_id(id):
 def add_user(name, username, password, avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     u = User(name=name, username=username, password=password, avatar=avatar)
+
+    if avatar:
+        res = cloudinary.uploader.upload(avatar)
+        print()
+        u.avatar = res['secure_url']
     db.session.add(u)
     db.session.commit()

@@ -1,8 +1,8 @@
 import math
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, session
 
-from eapp import app, dao, login
+from eapp import app, dao, login, utils
 from flask_login import login_user
 from flask_login import logout_user
 
@@ -49,15 +49,76 @@ def register_process():
     else:
         data = request.form.copy()
         del data['confirm']
-        data['avatar'] = 'https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729533/zuur9gzztcekmyfenkfr.jpg'
+
+        data['avatar'] = request.files.get('avatar')
         dao.add_user(**data)
         return redirect('/login')
     return render_template('register.html', msg=msg)
 
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+@app.route('/api/cart', methods=['post'])
+def add_to_cart():
+    cart = session.get('cart')
+    if not cart:
+        cart={}
+    id = request.json.get('id')
+
+    if id in cart:
+        cart[id]['quantity'] += 1
+    else:
+        cart[id] = {
+            'id': 1,
+            'name': request.json.get('name'),
+            'price': request.json.get('price'),
+            'quantity': 1
+        }
+    session['cart'] = cart
+    print(cart)
+
+@app.route('/api/cart/<product_id>', methods=['patch'])
+def update_cart(product_id):
+    cart = session.get('cart')
+
+    if cart and product_id in cart:
+        cart[product_id]['quantity'] = int(request.json.get('quantity', cart[product_id]['quantity']))
+    session['cart'] = cart
+    return utils.count_cart(cart=cart)
+
+
+@app.route('/api/cart/<product_id>', methods=['delete'])
+def delete_cart(product_id):
+    cart = session.get('cart')
+
+    if cart and product_id in cart:
+       del cart[product_id]
+    session['cart'] = cart
+    return utils.count_cart(cart=cart)
+'''
+{
+    '1': {
+        'id': 1,
+        'name': 'abc'
+        'price': 123,
+        'quantity': 2
+    },
+    '2': {
+        'id': 2,
+        'name': 'abc'
+        'price': 123,
+        'quantity':1
+    }
+}
+'''
+
+
 @app.context_processor
 def common_responses():
     return {
-        'categories': dao.load_categories()
+        'categories': dao.load_categories(),
+        'carts': utils.count_cart(session.get('cart'))
     }
 @login.user_loader
 def load_user(user_id):
