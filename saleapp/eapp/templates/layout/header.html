@@ -18,9 +18,9 @@
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link text-success" href="/">
-                        <img src="{{ current_user.avatar }}" width="30" class="rounded-circle">
+                        <img src="{{ current_user.avatar }}" width="30" class="rounded-circle" />
 
-                        Chào <span class="'text-danger">{{ current_user.username }}</span>
+                        Chào {{ current_user.username }}!
                     </a>
                 </li>
                 <li class="nav-item">
@@ -28,16 +28,16 @@
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="/login">Đăng nhập</a>
+                    <a class="nav-link text-success" href="/login?next=/">Đăng nhập</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="/register">Đăng ký</a>
                 </li>
-
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link text-danger" href="/cart">🛒<span class="badge bg-danger cart-counter">0</span> </a>
+                    <a class="nav-link text-danger" href="/cart">🛒<span class="badge bg-danger cart-counter">{{ carts.total_quantity }}</span></a>
                 </li>
+
 
             </ul>
             <form method="get" action="/" class="d-flex">
